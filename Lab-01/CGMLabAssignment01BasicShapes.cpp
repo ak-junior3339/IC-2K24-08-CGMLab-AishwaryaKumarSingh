@@ -1,61 +1,71 @@
 /*
- * CGM Lab Assignment - 1
- * Question: Write a C/C++ program using a graphics library/tool to draw 
- *           the following basic graphics primitives in a single program:
- *           1. A straight line
- *           2. A circle
- *           3. A rectangle
- *           4. A triangle
+ * CGM Lab Assignment - 2
+ * Question: Write a C/C++ program using a graphics library or tool to implement
+ *           the Digital Differential Analyzer (DDA) Line Drawing Algorithm to
+ *           draw a straight line between two given points.
  *
- * SUBMITTED BY : AISHWARYA KUMAR SINGH 
+ * SUBMITTED BY : AISHWARYA KUMAR SINGH
  * Roll No      : IC-2K24-08
  */
 
 #include <graphics.h>
 #include <conio.h>
-#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int roundOff(float v)
+{
+    return (int)floor(v + 0.5f);
+}
+
+void ddaLine(int x1, int y1, int x2, int y2, int color)
+{
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    int steps = 0;
+
+    /* steps = max(|dx|, |dy|) */
+    if (abs(dx) > abs(dy))
+    {
+        steps = abs(dx);
+    }
+    else
+    {
+        steps = abs(dy);
+    }
+
+    
+    float xInc = (float)dx / steps;
+    float yInc = (float)dy / steps;
+
+    float x = (float)x1;
+    float y = (float)y1;
+
+    for (int i = 0; i <= steps; i++)
+    {
+        putpixel(roundOff(x), roundOff(y), color);
+        x += xInc;
+        y += yInc;
+    }
+}
 
 int main()
 {
-   
+    /* Hardcoded input points */
+    int x1 = 60,  y1 = 150;
+    int x2 = 580, y2 = 400;
+
     int gd = DETECT, gm;
     initgraph(&gd, &gm, (char*)"");
 
-    
-    settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
+    /* Name */
     setcolor(WHITE);
-    outtextxy(140, 25, (char*)"CGM LAB ASSIGNMENT - 01");
+    outtextxy(140, 30, (char*)"Name: Aishwarya Kumar Singh  |  Roll No: IC-2K24-08");
 
-    settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
-    setcolor(WHITE);
-    outtextxy(200, 55, (char*)"Basic Shapes");
-    outtextxy(140, 80, (char*)"Name: Aishwarya Kumar Singh  |  Roll No: IC-2K24-08");
+    /* DDA line */
+    ddaLine(x1, y1, x2, y2, WHITE);
 
-    setcolor(RED);
-    rectangle(20, 110, 620, 430); 
-    line(320, 110, 320, 430);     
-    line(20, 270, 620, 270);     
-
-    setcolor(WHITE);
-    outtextxy(40, 125, (char*)"Straight Line");
-    line(60, 190, 280, 190);
-
-    setcolor(WHITE);
-    outtextxy(340, 125, (char*)"2. Circle");
-    circle(470, 190, 45);
-
-    setcolor(WHITE);
-    outtextxy(40, 285, (char*)"3. Rectangle");
-    rectangle(70, 320, 270, 400);
-
-    setcolor(WHITE);
-    outtextxy(340, 285, (char*)"4. Triangle");
-    int tx1 = 470, ty1 = 310; 
-    int tx2 = 390, ty2 = 400;
-    int tx3 = 550, ty3 = 400; 
-    line(tx1, ty1, tx2, ty2);
-    line(tx2, ty2, tx3, ty3);
-    line(tx3, ty3, tx1, ty1);
     getch();
     closegraph();
 
